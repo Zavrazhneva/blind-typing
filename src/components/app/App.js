@@ -11,16 +11,24 @@ export class App extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            showPopup: false,
+            showPopupLanguage: false,
+            showPopupStart: true
         }
         this.keyDown = this.keyDown.bind(this);
-        this.popupButtonClick = this.popupButtonClick.bind(this);
+        this.popupButtonLanguage = this.popupButtonLanguage.bind(this);
+        this.popupButtonStart = this.popupButtonStart.bind(this);
 
     }
 
-    popupButtonClick() {
+    popupButtonLanguage() {
         this.setState({
-            showPopup: false
+            showPopupLanguage: false
+        })
+    }
+
+    popupButtonStart() {
+        this.setState({
+            showPopupStart: false
         })
     }
 
@@ -29,7 +37,7 @@ export class App extends React.Component {
         const regexp = /[A-z]/;
         if(regexp.test(e.key)) {
             this.setState({
-                showPopup: true
+                showPopupLanguage: true
             })
         }
     }
@@ -72,7 +80,8 @@ export class App extends React.Component {
         return (
             <div className="content">
                 {this.state.isLoaded && <MainText dataItem={this.state.dataItem} />}
-                {this.state.showPopup && <Popup buttonClick={this.popupButtonClick}/>}
+                {this.state.showPopupStart && <Popup buttonClick={this.popupButtonStart} type={'start'}/>}
+                {this.state.showPopupLanguage && <Popup buttonClick={this.popupButtonLanguage} type={'language'}/>}
             </div>
         )
     }
