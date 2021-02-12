@@ -8,7 +8,11 @@ export class MainText extends React.Component {
 
     render() {
         return (
-            <div className="mainText">{this.props.dataItem}</div>
+            <div className="mainText">
+                {this.props.dataItem.map((element, index) => {
+                    return <span key={index}>{element}</span>
+                })}
+            </div>
         )
     }
 }
