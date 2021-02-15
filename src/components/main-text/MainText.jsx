@@ -2,15 +2,23 @@ import React from "react";
 import './MainText.css'
 
 export class MainText extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
+        const { letters, correctLetters, isCorrectLetter } = this.props;
         return (
             <div className="mainText">
-                {this.props.dataItem.map((element, index) => {
-                    return <span key={index}>{element}</span>
+                {letters.map((element, index) => {
+                    let classNameLetter = 'letter';
+                    if(index < correctLetters) {
+                        classNameLetter += ' letter__green'
+                    }
+                    if(index === correctLetters) {
+                        classNameLetter += ' letter__cursor'
+                    }
+                    if ( index === correctLetters && !isCorrectLetter) {
+                        classNameLetter = ' letter__error'
+                    }
+                    return <span key={index}  className={classNameLetter}>{element}</span>
                 })}
             </div>
         )

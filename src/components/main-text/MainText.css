@@ -8,3 +8,21 @@
     font-weight: 400;
     line-height: 150%;
 }
+
+.letter__error {
+    background-color: coral;
+    border-radius: 2px;
+    padding: 0 2px;
+    color: #fff
+}
+
+.letter__green {
+    color: mediumseagreen;
+}
+
+.letter__cursor {
+    background-color: mediumseagreen;
+    border-radius: 2px;
+    padding: 0 2px;
+    color: #fff
+}
