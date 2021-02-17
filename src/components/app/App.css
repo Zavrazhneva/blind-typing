@@ -1,8 +1,29 @@
-.content {
+.content__wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #73ccfb;
   height: 100vh;
   box-sizing: border-box;
+}
+
+.content {
+  display: flex;
+  max-width: 900px;
+  padding: 30px;
+  border-radius: 20px;
+  background-color: #fff;
+  font-size: 21px;
+  color: #5c5c5c;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.main-text__wrapper {
+  width: 80%;
+}
+
+.statistic {
+  width: 20%;
+  background-color: #73ccfb;
 }

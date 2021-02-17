@@ -2,6 +2,7 @@ import './App.css';
 import React from "react";
 import {MainText} from "../main-text/MainText";
 import {Popup} from "../popup/Popup";
+import {Speed} from "../speed/Speed";
 
 export class App extends React.Component {
 
@@ -34,14 +35,14 @@ export class App extends React.Component {
         const regexpEng = /[А-я]/;
 
         let isCorrectLetter = null;
-        if(this.state.language === "rus") {
+        if (this.state.language === "rus") {
             isCorrectLetter = regexpRus.test(letter)
         }
-        if(this.state.language === "eng") {
+        if (this.state.language === "eng") {
             isCorrectLetter = regexpEng.test(letter)
         }
 
-        if(isCorrectLetter) {
+        if (isCorrectLetter) {
             this.setState({
                 showPopupLanguage: true
             })
@@ -49,19 +50,19 @@ export class App extends React.Component {
     }
 
     keyDown = (e) => {
-        if(e.key === 'Shift') {
+        if (e.key === 'Shift') {
             return;
         }
         this.validationLanguage(e.key);
 
-        if(this.state.startGame) {
-          this.validationLetter(e.key);
+        if (this.state.startGame) {
+            this.validationLetter(e.key);
         }
     }
 
     validationLetter(letter) {
-        const { letters, correctLetterCounter, incorrectLetterCounter } = this.state;
-        if(letter === letters[correctLetterCounter]) {
+        const {letters, correctLetterCounter, incorrectLetterCounter} = this.state;
+        if (letter === letters[correctLetterCounter]) {
             this.setState({
                 correctLetterCounter: correctLetterCounter + 1,
                 isCorrectLetter: true
@@ -79,9 +80,9 @@ export class App extends React.Component {
     }
 
     onChangeLanguage = (lang) => {
-        this.setState ({
+        this.setState({
             language: lang
-        }, ()=> {
+        }, () => {
             this.getGeographicFacts();
         });
     }
@@ -94,7 +95,7 @@ export class App extends React.Component {
                     this.setState({
                         isLoaded: true,
                         data: result,
-                        letters: this.getRandomText( result[this.state.language]).split(''),
+                        letters: this.getRandomText(result[this.state.language]).split(''),
                         correctLetterCounter: 0,
                         incorrectLetterCounter: 0
                     });
@@ -113,18 +114,27 @@ export class App extends React.Component {
     }
 
     getRandomText(data) {
-        const max = Object.keys(data).length-1;
+        const max = Object.keys(data).length - 1;
         let rand = Math.round(Math.random() * (max));
         return data[Object.keys(data)[rand]];
     }
 
     render() {
         return (
-            <div className="content">
-                {this.state.isLoaded && <MainText letters={this.state.letters} correctLetters={this.state.correctLetterCounter} isCorrectLetter={this.state.isCorrectLetter}/>}
-                {this.state.showPopupStart && <Popup buttonClick={this.popupButtonStart} type={'start'} onChangeLanguage={this.onChangeLanguage}/>}
+            <main className="content__wrapper">
+                {this.state.isLoaded && <div className="content">
+                    <div className="main-text__wrapper">
+                        <MainText letters={this.state.letters} correctLetters={this.state.correctLetterCounter}
+                                  isCorrectLetter={this.state.isCorrectLetter}/>
+                        <Speed correctLetters={this.state.correctLetterCounter} startGame={this.state.startGame}/>
+                    </div>
+
+                </div>}
+                {this.state.showPopupStart &&
+                <Popup buttonClick={this.popupButtonStart} type={'start'} onChangeLanguage={this.onChangeLanguage}/>}
                 {this.state.showPopupLanguage && <Popup buttonClick={this.popupButtonLanguage} type={'language'}/>}
-            </div>
+
+            </main>
         )
     }
 }
