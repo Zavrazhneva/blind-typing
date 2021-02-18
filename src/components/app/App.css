@@ -10,6 +10,7 @@
 .content {
   display: flex;
   max-width: 900px;
+  min-height: 250px;
   padding: 30px;
   border-radius: 20px;
   background-color: #fff;
@@ -20,10 +21,36 @@
 }
 
 .main-text__wrapper {
-  width: 80%;
+  display: flex;
 }
 
 .statistic {
   width: 20%;
-  background-color: #73ccfb;
+  padding-left: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
+.start-again__wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 15px 0;
+}
+
+.start-again__icon {
+  width: 20px;
+  height: 20px;
+  background-image: url("../../assets/restart.png");
+  background-size: cover;
+  margin-right: 10px;
+}
+
+.start-again__text {
+  color: #a6cc2b;
+  font-size: 12px;
+  line-height: 80%;
+  text-transform: uppercase;
+}
+

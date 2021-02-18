@@ -3,31 +3,38 @@ import React from "react";
 import {MainText} from "../main-text/MainText";
 import {Popup} from "../popup/Popup";
 import {Speed} from "../speed/Speed";
+import {Accuracy} from "../accuracy/Accuracy";
 
 export class App extends React.Component {
+
+    speedRef = React.createRef();
+    accuracyRef = React.createRef();
 
     constructor(props) {
         super(props);
         this.state = {
             isLoaded: false,
             showPopupLanguage: false,
-            showPopupStart: true
+            showPopupStart: true,
+            accuracy: new Set(),
+            correctLetterCounter: 0
         }
-        this.popupButtonStart = this.popupButtonStart.bind(this);
-
     }
 
-    popupButtonLanguage = () => {
+    isShowPopupLanguage = () => {
         this.setState({
             showPopupLanguage: false
         })
     }
 
     popupButtonStart = () => {
+        this.startAgain();
         this.setState({
             showPopupStart: false,
-            startGame: true
-        })
+            startGame: true,
+            finishGame: false
+        });
+        this.getGeographicFacts();
     }
 
     validationLanguage = (letter) => {
@@ -50,7 +57,10 @@ export class App extends React.Component {
     }
 
     keyDown = (e) => {
-        if (e.key === 'Shift') {
+
+        const ignoredKeys = ['Shift', 'Enter', 'Control', 'Backspace', 'Alt', 'Tab', 'CapsLock', 'Escape'];
+
+        if (ignoredKeys.includes(e.key)){
             return;
         }
         this.validationLanguage(e.key);
@@ -62,16 +72,25 @@ export class App extends React.Component {
 
     validationLetter(letter) {
         const {letters, correctLetterCounter, incorrectLetterCounter} = this.state;
+        if(correctLetterCounter === letters.length - 1) {
+            this.setState({
+                finishGame: true,
+            })
+            this.isFinishGame();
+        }
         if (letter === letters[correctLetterCounter]) {
             this.setState({
                 correctLetterCounter: correctLetterCounter + 1,
                 isCorrectLetter: true
             });
         } else {
+            let accuracyState = new Set(this.state.accuracy);
+            accuracyState.add(correctLetterCounter);
             this.setState({
                 incorrectLetterCounter: incorrectLetterCounter + 1,
-                isCorrectLetter: false
-            });
+                isCorrectLetter: false,
+                accuracy: accuracyState
+            },);
         }
     }
 
@@ -119,6 +138,28 @@ export class App extends React.Component {
         return data[Object.keys(data)[rand]];
     }
 
+    startAgain = () => {
+        this.setState({
+            correctLetterCounter: 0,
+            incorrectLetterCounter: 0,
+            accuracy: new Set(),
+        });
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.keyDown);
+    }
+
+    isFinishGame = () => {
+        const speed = this.speedRef.current.resultSpeed();
+        const accuracy = this.accuracyRef.current.getPrecision();
+        this.setState({
+            speed: speed,
+            accuracyValue: accuracy,
+            startGame: false
+        })
+    }
+
     render() {
         return (
             <main className="content__wrapper">
@@ -126,14 +167,21 @@ export class App extends React.Component {
                     <div className="main-text__wrapper">
                         <MainText letters={this.state.letters} correctLetters={this.state.correctLetterCounter}
                                   isCorrectLetter={this.state.isCorrectLetter}/>
-                        <Speed correctLetters={this.state.correctLetterCounter} startGame={this.state.startGame}/>
+                        <div className="statistic">
+                            <Speed ref={this.speedRef} correctLetters={this.state.correctLetterCounter} startGame={this.state.startGame}/>
+                            <Accuracy ref={this.accuracyRef} lengthText={this.state.letters.length} accuracy={this.state.accuracy}/>
+                            <div className="start-again__wrapper" onClick={this.startAgain}>
+                                <span className="start-again__icon"/>
+                                <span className="start-again__text">Заново</span>
+                            </div>
+                        </div>
                     </div>
 
                 </div>}
                 {this.state.showPopupStart &&
-                <Popup buttonClick={this.popupButtonStart} type={'start'} onChangeLanguage={this.onChangeLanguage}/>}
-                {this.state.showPopupLanguage && <Popup buttonClick={this.popupButtonLanguage} type={'language'}/>}
-
+                <Popup buttonClick={this.popupButtonStart} type={'start'}  onChangeLanguage={this.onChangeLanguage}/>}
+                {this.state.showPopupLanguage && <Popup buttonClick={this.isShowPopupLanguage} type={'language'}/>}
+                {this.state.finishGame && <Popup type={'finish'} buttonClick={this.popupButtonStart} speed={this.state.speed} accuracy={this.state.accuracyValue}/>}
             </main>
         )
     }

@@ -1,0 +1,22 @@
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.accuracy__icon {
+    width: 20px;
+    height: 20px;
+    background-image: url("../../assets/target.png");
+    background-size: cover;
+    margin-right: 10px;
+}
+.accuracy__text {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #b5bbc2;
+}
+
+.speed__indicator {
+    font-size: 32px;
+    color: #67defd;
+}

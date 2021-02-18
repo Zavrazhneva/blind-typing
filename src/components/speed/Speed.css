@@ -1,0 +1,12 @@
+.speed__icon {
+    width: 20px;
+    height: 20px;
+    background-image: url("../../assets/timer.png");
+    background-size: cover;
+    margin-right: 10px;
+}
+.speed__text {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #b5bbc2;
+}

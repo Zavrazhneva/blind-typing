@@ -1,10 +1,12 @@
 import React from "react";
+import './Speed.css';
 
 export class Speed extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             countIntervalSpeed: [],
+            resultSpeed: 0
         }
     }
 
@@ -13,22 +15,20 @@ export class Speed extends React.Component {
         if (startGame) {
             let startLettersCount = this.props.correctLetters;
             setInterval(()=> {
+                const countIntervalSpeed = [...this.state.countIntervalSpeed, (this.props.correctLetters - startLettersCount) * 10];
                 this.setState({
-                    countIntervalSpeed: [...this.state.countIntervalSpeed, (this.props.correctLetters - startLettersCount) * 10],
-                }, () => {
-                    this.resultSpeed();
+                    countIntervalSpeed,
+                    resultSpeed: this.resultSpeed(countIntervalSpeed)
                 });
                 startLettersCount = this.props.correctLetters;
             },6000)
         }
     }
-    resultSpeed = () => {
-        const resultSpeed = this.state.countIntervalSpeed.reduce((acc, item) => {
+    resultSpeed = (countIntervalSpeed = this.state.countIntervalSpeed) => {
+        const resultSpeed = countIntervalSpeed.reduce((acc, item) => {
             return acc += item;
-        },0) / this.state.countIntervalSpeed.length;
-        this.setState({
-            resultSpeed: Math.round(resultSpeed)
-        })
+        },0) / countIntervalSpeed.length;
+        return Math.round(resultSpeed);
     }
 
     componentDidMount() {
@@ -37,14 +37,12 @@ export class Speed extends React.Component {
 
     render() {
         return (
-            <div className="statistic">
-                <div className="speed">
-                    <div className="title">
-                        <span className="title__icon"/>
-                        <span className="title__text">Скорость</span>
-                    </div>
-                    <span className="speed__indicator">{this.state.resultSpeed} зн./мин</span>
+            <div className="speed">
+                <div className="title">
+                    <span className="speed__icon"/>
+                    <span className="speed__text">Скорость</span>
                 </div>
+                <span className="speed__indicator">{this.state.resultSpeed} зн./мин</span>
             </div>
         )
     }
